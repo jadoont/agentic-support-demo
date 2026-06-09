@@ -1,0 +1,22 @@
+{
+  "reset_access": {
+    "title": "Resetting platform access",
+    "keywords": ["locked out", "can't log in", "access", "reset", "sso", "sign in"],
+    "answer": "If you're locked out, an admin can reset your session from the Access panel. Most lockouts clear after a session reset. If single sign-on (SSO) itself is failing, that's an identity-provider issue on the IT side and needs to be escalated rather than handled in-app."
+  },
+  "available_models": {
+    "title": "Which models are available",
+    "keywords": ["which model", "what models", "models available", "model list"],
+    "answer": "The platform routes to the approved model set configured for your tenant. The banking-reasoning models are the default for lending, compliance, and underwriting workflows. Exact availability is set per-tenant by your admin, so check the Models page for your org's list."
+  },
+  "pii_redaction": {
+    "title": "Handling customer PII in prompts",
+    "keywords": ["pii", "redact", "personal information", "customer data", "sensitive"],
+    "answer": "Redact customer PII before sending a prompt unless your workflow runs inside an approved, logged agent. The platform flags likely PII automatically, but final responsibility for redaction sits with the user. When in doubt, strip identifiers and reference records by internal ID."
+  },
+  "prompting_tips": {
+    "title": "Getting better answers from an agent",
+    "keywords": ["prompt", "better answer", "tips", "how do i ask", "improve"],
+    "answer": "Give the agent the document or policy it should reason over, state the jurisdiction, and ask it to cite its source. Vague prompts produce vague answers; grounded prompts produce auditable ones. For compliance questions, always ask for the citation so a human can verify."
+  }
+}
