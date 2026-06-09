@@ -1,21 +1,16 @@
 # Agentic support: when should an agent answer, act, or escalate?
 
-A small, runnable agent for client support in a regulated domain (banking-flavored).
+A small, runnable agent for client support in a regulated domain.
 For every inbound message it makes one decision: answer, act, or
 escalate, and the safety of that decision does not depend on the model
 being right.
 
-The whole design is one principle:
-
-> **The model proposes. Code disposes.**
-
-A probabilistic model is allowed to *suggest* what to do. It is never allowed to
-*decide* whether a sensitive action runs. That call belongs to a deterministic
+A probabilistic model is allowed to suggest what to do. It is not allowed to
+decide whether a sensitive action runs. That call belongs to a deterministic
 guardrail layer. In a domain where the wrong action means an unauthorized loan
-approval or a moved balance, you cannot hand the keys to something that is right
-"most of the time."
+approval or a moved balance, you cannot take that risk.
 
-Runs offline, no API key, standard library only.
+note: this demo runs offline, no API key, standard library only.
 
 ## The flow
 
@@ -34,10 +29,10 @@ inbound message
 ```
 
 The brain is intentionally written to make the mistake a real model makes: it
-sees "approve this loan" and proposes *acting*, because it looks like an action.
+sees "approve this loan" and proposes 'acting', because it looks like an action.
 The guardrail layer catches every one of those and forces an escalation instead.
 
-## Run it
+## Running it
 
 ```bash
 python run.py "How do I reset my access?"
@@ -52,33 +47,32 @@ blocking an action the brain wanted to take.
 
 One accuracy number hides the failures that matter. The harness scores by what
 actually counts for support in a regulated setting, and breaks results down by
-request type so you can see *where* it breaks:
+request type so you can see where it breaks:
 
 | Metric | Result | Why it matters |
 |---|---|---|
-| Routing accuracy | 88% | Did it pick the right lane? Useful, but not the safety bar. |
-| Escalation recall | 100% | Of requests that **must** reach a human, how many did. |
-| Over-escalation | 12% | Wrongly punting easy requests — annoying, not dangerous. |
-| **Guardrail violations** | **0** | Restricted actions that actually executed. **This must be 0.** |
-| Unsafe proposals caught | 4 | Times the brain tried a restricted action and was blocked. |
+| Routing accuracy | 88% | Did it pick the right lane? This is useful, but not the safety bar. |
+| Escalation recall | 100% | Of requests that must reach a human, how many did? |
+| Over-escalation | 12% | easy requests — not dangerous. |
+| Guardrail violations | 0 | Restricted actions that actually executed: this must be 0.|
+| Unsafe proposals caught | 4 | Times the model tried a restricted action and was blocked. |
 
-The number to read first is the boring one: **guardrail violations = 0.** The
+observation: **guardrail violations = 0.** The
 brain proposed acting on four restricted requests (loan approval, compliance
-override, fund movement, account closure); the guardrail blocked all four. Safety
-held even where the brain was wrong — which is the point.
+override, fund movement, account closure); the guardrail blocked all four.
 
-## The misses are real
+## What it missed
 
 Routing is 88%, not 100%, and the failing cases are in the per-case trace on
 purpose:
 
-- **c01** ("how do I reset my access") — the agent *resets the session* instead
+- **c01** ("how do I reset my access") — the agent resets the session instead
   of explaining how. Arguably resolves the user's problem, but it's an action
-  where an answer was expected. A keyword brain can't tell "do X" from "how do I X."
+  where an answer was expected. 
 - **c16** ("draft a friendly reply…") — no knowledge-base grounding, so it
-  escalates rather than inventing a reply. A wrong call here, but it fails *safe*.
+  escalates rather than inventing a reply.
 
-Both are honest limitations of a rule-based brain, and both are the kind of
+Both are honest limitations of a rule-based model, and both are the kind of
 pattern-recognition gap (education vs. action vs. limitation) you'd tune with a
 real model and a larger labeled set.
 
@@ -89,7 +83,7 @@ real model and a larger labeled set.
 - Replace keyword retrieval with embeddings + vector search over a real,
   versioned knowledge base.
 - Grow `eval_cases.jsonl` into a labeled regression set run in CI, so a change to
-  the brain can't silently raise the violation count.
+  the model can't silently raise the violation count.
 
 ## Layout
 
