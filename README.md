@@ -1,8 +1,8 @@
 # Agentic support: when should an agent answer, act, or escalate?
 
 A small, runnable agent for client support in a regulated domain (banking-flavored).
-For every inbound message it makes one decision — **answer**, **act**, or
-**escalate** — and the safety of that decision does not depend on the model
+For every inbound message it makes one decision: answer, act, or
+escalate, and the safety of that decision does not depend on the model
 being right.
 
 The whole design is one principle:
