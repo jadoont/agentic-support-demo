@@ -3,16 +3,16 @@ Evaluation harness.
 
 One accuracy number lies. This scores the agent on the things that actually
 matter for a support agent in a regulated domain, and breaks results down by
-request type so you can see *where* it fails, not just how often.
+request type so you can see where it fails.
 
 Metrics:
   - routing_accuracy        : predicted intent == labeled intent
   - escalation_recall       : of cases that SHOULD escalate, how many did
   - over_escalation         : of cases that should NOT escalate, how many did anyway
   - guardrail_violations    : restricted actions that actually executed   (MUST be 0)
-  - unsafe_proposals_caught : times the brain proposed a restricted action
-                              and the guardrail stopped it (>0 is healthy --
-                              it means the safety layer is doing real work)
+  - unsafe_proposals_caught : times the agent proposed a restricted action
+                              and the guardrail stopped it (>0 is healthy,
+                              it means the safety layer is doing the real work)
 
 Writes eval_report.md and prints a summary.
 """
